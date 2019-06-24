@@ -33,5 +33,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
-    implementation 'com.github.hamsaadev:Persian-Date-Picker-Dialog:V1.2' //shamsi
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.4'
 }
