@@ -2,10 +2,14 @@ package ir.pearly.pershiandate;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -23,15 +27,8 @@ import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
  * Created by Administrator on 4/24/2018.
  */
 
-//compile 'com.mohamadamin:persianmaterialdatetimepicker:1.2.1'
 
-// new persian
-//    compile 'com.github.hamsaadev:Persian-Date-Picker-Dialog:V1.2' //shamsi
-//    allprojects {
-//            repositories {
-//            maven { url "https://jitpack.io" }
-//            }
-//            }
+
 
 public class AlaviDatePicker {
     public int year, month, day, hour, minute;
@@ -40,6 +37,10 @@ public class AlaviDatePicker {
     private Activity activity;
     private boolean ispersian;
     private AlaviPershianDate alaviPershianDate;
+    public String positiveButtonString="باشه";
+    public String negativeButtonString="بیخیال";
+    public String todayButtonString="امروز";
+
 
     public AlaviDatePicker(Activity activity) {
         this.activity = activity;
@@ -194,9 +195,10 @@ public class AlaviDatePicker {
     public void showPersianiDatePickerOld() {
         cancel = true;
         PersianDatePickerDialog picker2 = new PersianDatePickerDialog(activity)
-                .setPositiveButtonString("باشه")
-                .setNegativeButton("بیخیال")
-//                .setTypeFace(iran)
+                .setPositiveButtonString(positiveButtonString)
+                .setNegativeButton(negativeButtonString)
+                .setTodayButton(todayButtonString)
+                .setTodayButtonVisible(true)
                 .setActionTextColor(Color.GRAY)
                 .setMaxYear(1500)
                 .setMinYear(1300)
@@ -230,9 +232,13 @@ public class AlaviDatePicker {
         ir.hamsaa.persiandatepicker.util.PersianCalendar persianCalendar = new ir.hamsaa.persiandatepicker.util.PersianCalendar();
         persianCalendar.setPersianDate(year, month, day);
 
+
         PersianDatePickerDialog picker2 = new PersianDatePickerDialog(activity)
-                .setPositiveButtonString("باشه")
-                .setNegativeButton("بیخیال")
+                .setPositiveButtonString(positiveButtonString)
+                .setNegativeButton(negativeButtonString)
+                .setTodayButton(todayButtonString)
+
+                .setTodayButtonVisible(true)
                 .setInitDate(persianCalendar)
                 .setActionTextColor(Color.GRAY)
 
@@ -241,7 +247,6 @@ public class AlaviDatePicker {
                 .setListener(new Listener() {
                     @Override
                     public void onDateSelected(ir.hamsaa.persiandatepicker.util.PersianCalendar persianCalendar) {
-//                        Toast.makeText(MainActivity.this, persianCalendar.getPersianYear() + "/" + persianCalendar.getPersianMonth() + "/" + persianCalendar.getPersianDay(), Toast.LENGTH_SHORT).show();
                         year = persianCalendar.getPersianYear();
                         month = persianCalendar.getPersianMonth();
                         day = persianCalendar.getPersianDay();
@@ -254,8 +259,8 @@ public class AlaviDatePicker {
                     public void onDismissed() {
 
                     }
-
                 });
+
 
         picker2.show();
         waitstart();
@@ -325,6 +330,90 @@ public class AlaviDatePicker {
                     }
                 }, year, month, day);
         datePickerDialog.show();
+
+        datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                cancel = true;
+            }
+        });
+        datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                waitstop();
+            }
+        });
+        waitstart();
+    }
+
+    public void showMiladiMonthPicker() {
+        cancel = true;
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = 1;
+//        text1.setText(mDay + "/" + (mMonth+1) + "/" + mYear);
+
+
+        android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(activity, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                new android.app.DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int myear,
+                                          int monthOfYear, int dayOfMonth) {
+                        year = myear;
+                        month = monthOfYear + 1;
+                        day = dayOfMonth;
+                        cancel = false;
+                        ispersian = false;
+                    }
+                }, year, month, day);
+        ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+
+        datePickerDialog.show();
+
+        datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                cancel = true;
+            }
+        });
+        datePickerDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                waitstop();
+            }
+        });
+
+        waitstart();
+    }
+
+    public void showMiladiMonthPicker(int iyear, int imonth) {
+        cancel = true;
+
+        year = iyear;
+        month = imonth - 1;
+        day = 1;
+//        text1.setText(mDay + "/" + (mMonth+1) + "/" + mYear);
+
+
+        android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(activity, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                new android.app.DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int myear,
+                                          int monthOfYear, int dayOfMonth) {
+                        year = myear;
+                        month = monthOfYear + 1;
+                        day = dayOfMonth;
+                        cancel = false;
+                        ispersian = false;
+                    }
+                }, year, month, day);
+        ((ViewGroup) datePickerDialog.getDatePicker()).findViewById(Resources.getSystem().getIdentifier("day", "id", "android")).setVisibility(View.GONE);
+
+        datePickerDialog.show();
+
         datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -362,6 +451,7 @@ public class AlaviDatePicker {
                         ispersian = false;
                     }
                 }, year, month, day);
+
 
         datePickerDialog.show();
 
